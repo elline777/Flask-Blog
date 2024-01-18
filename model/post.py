@@ -1,10 +1,19 @@
 from model.user import User
-
-
+from datetime import datetime
 class Post:
-    def __init__(self, pub_date: str, title: str, body: str, author: User):
+    def __init__(self, _id: int, title: str, text: str, published: datetime, author: User):
+        self._id = _id
         self.title = title
-        self.body = body
+        self.text = text
+        self.published = published
         self.author = author
-        self.pub_date = pub_date
+
+    def serialize(self):
+        return {
+            "_id": self._id,
+            "title": self.title,
+            "text": self.text,
+            "published": self.published,
+            "author": self.author.serialize()
+        }
 
