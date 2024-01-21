@@ -19,12 +19,14 @@ users = {
     2: User(2, 'editor')
 }
 
+
 @app.errorhandler(404)
 def page_not_found(error):
     return jsonify({
         'error_code': 404,
         'error_text': 'Page not found'
     })
+
 
 @app.errorhandler(400)
 def page_not_found(error):
@@ -33,9 +35,10 @@ def page_not_found(error):
         'error_text': 'Bad request'
     })
 
+
 @app.route(POST_API_ROOT + '/', methods=['POST'])
 def create_post():
-    if not request.json or not 'title' in request.json:
+    if not request.json or 'title' not in request.json:
         abort(400)
 
     storage['id_counter'] += 1
@@ -52,7 +55,8 @@ def create_post():
 
 @app.route(POST_API_ROOT + '/', methods=['GET'])
 def list_posts():
-    return jsonify({'posts': [post.serialize() for post in storage['posts'].values()]})
+    return jsonify(
+        {'posts': [post.serialize() for post in storage['posts'].values()]})
 
 
 @app.route(POST_API_ROOT + '/<int:_id>/', methods=['GET'])
@@ -70,8 +74,10 @@ def update_post(_id: int):
     if not request.json:
         abort(400)
 
-    storage['posts'][_id].title = request.json.get('title', storage['posts'][_id].title)
-    storage['posts'][_id].text = request.json.get('text', storage['posts'][_id].text)
+    storage['posts'][_id].title = request.json.get('title',
+                                                   storage['posts'][_id].title)
+    storage['posts'][_id].text = request.json.get('text',
+                                                  storage['posts'][_id].text)
 
     return jsonify(storage['posts'][_id].serialize())
 
@@ -82,5 +88,3 @@ def delete_post(_id: int):
         abort(404)
     del storage['posts'][_id]
     return jsonify({'result': True})
-
-
