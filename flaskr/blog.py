@@ -27,7 +27,7 @@ def create():
         error = None
 
         if not title:
-            error = 'Title is requiered.'
+            error = 'Title is required.'
 
         if error is not None:
             flash(error)
@@ -72,7 +72,7 @@ def update(id):
         error = None
 
         if not title:
-            error = 'Title is requiered.'
+            error = 'Title is required.'
 
         if error is not None:
             flash(error)
